@@ -1,16 +1,20 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'ENVIRONMENT', defaultValue: 'DEV', description: 'Target environment for test execution')
+        string(name: 'ENVIRONMENT', defaultValue: 'DEV', description: 'Target environemnt for test excution')
     }
     triggers { 
         pollSCM('*/1 * * * *')
-
     }
     stages {
         stage('test') {
             steps {
-                echo "Running UI tests on ${params.ENVIRONMENT} environment"
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Running UI tests on ${params.ENVIRONMENT} environemnt and on ${browsers[i]} browser"
+                    }
+                }
             }
         }
     }
