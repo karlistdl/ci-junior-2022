@@ -1,5 +1,6 @@
 pipeline {
     agent any
+<<<<<<< HEAD
     triggers { 
         pollSCM('*/1 * * * *') 
     }
@@ -11,3 +12,13 @@ pipeline {
         }
     }
 }
+=======
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+>>>>>>> d1bcc3f50abcd1dfa629c4385db6aa6497d18875
