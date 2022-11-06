@@ -18,7 +18,9 @@ pipeline {
         }
         stage('test-dev') {
             steps {
-                echo "Testing on DEV..."
+                script{
+                    test("DEV")
+                }
             }
         }
         stage('deploy-int') {
@@ -30,7 +32,9 @@ pipeline {
         }
         stage('test-int') {
             steps {
-                echo "Testing on INT..."
+                script{
+                    test("INT")
+                }
             }
         }
         stage('deploy-prd') {
@@ -42,7 +46,9 @@ pipeline {
         }
         stage('test-prd') {
             steps {
-                echo "Testing on PRD..."
+                script{
+                    test("PRD")
+                }
             }
         }            
     }
@@ -54,9 +60,9 @@ def deploy(String environment){
 }
 
 def test(String environment){
-    echo "Tests on ${environment} environment triggered.."
+    echo "Tests on ${environment} environmnt triggered.."
     sh "docker run --network=host -d -t --name api_tests_executor_${environment} api_test_executor"
-    sh "docker exec api_tests_executor_${environment} 	cucumber --tags=${environment} --format html --out test-output/report_$(date +%T).html"
-    sh "docker cp api_tests_executor_${environment}:usr/src/api-tests/test-output/report.html report_${environment}.html"
+    sh "docker exec api_tests_executor_${environment} cucumber --tags=@${environment} --format html --out test-output/report.html"
+    sh "docker cp api_tests_executor_${environment}:/usr/src/api-tests/test-output/report.html report_${environment}.html"
     sh "docker rm -f api_tests_executor_${environment}"
 }
